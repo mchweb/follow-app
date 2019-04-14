@@ -33,7 +33,6 @@ class _PinScreenState extends State<PinScreen> {
   List<Widget> _textFields;
   List<FocusNode> _focusNodes;
   List<TextEditingController> _textControllers;
-  bool _isChatAlreadyExists = false;
 
   @override
   void initState()  {
@@ -43,7 +42,6 @@ class _PinScreenState extends State<PinScreen> {
         _setStateToGeneration();
 
         _pin = _generatePin();
-        _isChatAlreadyExists = false;
 
         // Save to database
         Firestore.instance
@@ -149,11 +147,9 @@ class _PinScreenState extends State<PinScreen> {
   Widget build(BuildContext context) {
     if (_canNavigatePop == true) {
       Navigator.pop(context);
-      return Container();
     } 
     if (_patientsPin != null) {
       _handlePatientEnteredPin();
-      _isChatAlreadyExists = true;
     }
     switch (user.userType) {
       case user.UserType.doctor:
@@ -283,9 +279,9 @@ class _PinScreenState extends State<PinScreen> {
       .documents
       .where((snapshot) => snapshot.data.containsValue(user.id)).toList();
 
-    //_isChatAlreadyExists = docs.length > 0;
-    if (_isChatAlreadyExists == false) {
-      await Firestore.instance
+    bool isChatAlreadyExists = docs.length > 0;
+    if (isChatAlreadyExists == false) {
+      Firestore.instance
         .collection('chats')
         .document()
         .setData({
@@ -293,7 +289,7 @@ class _PinScreenState extends State<PinScreen> {
           'patient_id': _patientsPin['patient_id'],
           'create_date': Timestamp.now()
         });
-      await Firestore.instance
+      Firestore.instance
         .collection('pin_codes')
         .document(_patientsPin.documentID)
         .setData({
@@ -306,10 +302,10 @@ class _PinScreenState extends State<PinScreen> {
           'is_acknowledged': true
         });
     } else {
-      //await Firestore.instance
-      //  .collection('pin_codes')
-      //  .document(_patientsPin.documentID)
-      //  .delete();
+      Firestore.instance
+        .collection('pin_codes')
+        .document(_patientsPin.documentID)
+        .delete();
     }
     _canNavigatePop = true;
   }

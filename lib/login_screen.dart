@@ -55,18 +55,27 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _buildSignInButton() {
     return Center(
-      child: RaisedButton(
-        onPressed: _handleSignInRequest,
-        child: Text(
-          GOOGLE_SIGN_IN_TEXT,
-          style: TextStyle(fontSize: 16.0)
-        ),
-        textColor: SIGN_IN_BUTTON_TEXT_COLOR,
-        color: SIGN_IN_BUTTON_COLOR,
-        highlightColor: SIGN_IN_BUTTON_HIGHLIGHT_COLOR,
-        //splashColor: Colors.transparent,
-        padding: EdgeInsets.fromLTRB(30.0, 15.0, 30.0, 15.0)
-      )
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text('Welcome to Follow-App!', style: TextStyle(fontSize: 24.0)),
+          Container( height: 10.0 ),
+          Text('Sign in using your Google account to start'),
+          Container( height: 30.0 ),
+          RaisedButton(
+            onPressed: _handleSignInRequest,
+            child: Text(
+              GOOGLE_SIGN_IN_TEXT,
+              style: TextStyle(fontSize: 16.0)
+            ),
+            textColor: SIGN_IN_BUTTON_TEXT_COLOR,
+            color: SIGN_IN_BUTTON_COLOR,
+            highlightColor: SIGN_IN_BUTTON_HIGHLIGHT_COLOR,
+            //splashColor: Colors.transparent,
+            padding: EdgeInsets.fromLTRB(30.0, 15.0, 30.0, 15.0)
+          ),
+        ],
+      ),
     );
   }
 

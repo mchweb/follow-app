@@ -132,7 +132,7 @@ class _DialogsScreenState extends State<DialogsScreen> {
                         return Container();
                       } else if (userSnapshot.data.data != null) {
                         return Column(children: <Widget>[
-                          _buildDialog(userSnapshot.data, snapshot.data.documents[i].documentID),
+                          _buildDialog(userSnapshot.data, snapshot.data.documents[i]),
                           Divider(height: 0)
                         ]);
                       } else {
@@ -172,15 +172,22 @@ class _DialogsScreenState extends State<DialogsScreen> {
     }
   }
 
-  Widget _buildDialog(DocumentSnapshot dialog, String chatId){
+  Widget _buildDialog(DocumentSnapshot dialog_user, DocumentSnapshot dialog){
+    String timestamp = '';
+    if (dialog['date'] != null){
+      DateTime dt = dialog['date'].toDate();
+      timestamp = 
+        (dt.hour < 10 ? '0' : '') + dt.hour.toString() + ':' +
+        (dt.second < 10 ? '0' : '') + dt.second.toString();
+    }
     return new ListTile(
       onTap: () => { 
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => DialogScreen(
-            chat_id: chatId,
-            title: dialog['nickname'],
-            avatarUrl: dialog['photoUrl']
+            chat_id: dialog.documentID,
+            title: dialog_user['nickname'],
+            avatarUrl: dialog_user['photoUrl']
           ))
         )
       },
@@ -188,21 +195,21 @@ class _DialogsScreenState extends State<DialogsScreen> {
       leading: new CircleAvatar(
         foregroundColor: Theme.of(context).primaryColor,
         backgroundColor: Colors.grey,
-        backgroundImage: new NetworkImage(dialog['photoUrl']),
+        backgroundImage: new NetworkImage(dialog_user['photoUrl']),
       ),
       title: new Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           new Flexible(
             child: new Text(
-              dialog['nickname'],
+              dialog_user['nickname'] ?? "",
               overflow: TextOverflow.ellipsis,
               style: new TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
           new Text(
-            '04:20',
-            style: new TextStyle(color: 5 > 0 ? Colors.green : Colors.grey, fontSize: 14.0),
+            timestamp,
+            style: new TextStyle(color: 5 < 0 ? Colors.green : Colors.grey, fontSize: 14.0),
           ),
         ],
       ),
@@ -212,14 +219,17 @@ class _DialogsScreenState extends State<DialogsScreen> {
           new Flexible(
             child: Container(
               padding: const EdgeInsets.only(top: 7.0),
-              child: Text(
-                'Last message',
-                overflow: TextOverflow.ellipsis,
-                style: new TextStyle(color: Colors.grey, fontSize: 15.0),
-              ),
+              child: Row(children: <Widget>[
+                dialog['lastMessageUser'] == user.id ? Text('You: ', style: TextStyle(fontWeight: FontWeight.bold)) : Container(),
+                Text(
+                  dialog['lastMessage'] ?? "",
+                  overflow: TextOverflow.ellipsis,
+                  style: new TextStyle(color: Colors.grey, fontSize: 15.0),
+                ),
+              ],) 
             ),
           ),
-          5 > 0 ? Align(
+          5 < 0 ? Align(
             alignment: Alignment.bottomRight,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 3.0),

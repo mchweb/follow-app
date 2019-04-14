@@ -103,16 +103,27 @@ class _DialogScreenState extends State<DialogScreen> {
   }
 
   void _handleSubmitted(String text){
-    Firestore.instance
-      .collection('messages')
-      .document()
-      .setData({
-        'chat_id': widget.chat_id,
-        'user_id': user.id,
-        'date': Timestamp.now(),
-        'text': text
-      });
-    _textController.clear();
+    if (text != ""){
+      Timestamp timestamp = Timestamp.now();
+      Firestore.instance
+        .collection('messages')
+        .document()
+        .setData({
+          'chat_id': widget.chat_id,
+          'user_id': user.id,
+          'date': timestamp,
+          'text': text
+        });
+      Firestore.instance
+        .collection('chats')
+        .document(widget.chat_id)
+        .updateData({
+          'date': timestamp,
+          'lastMessageUser': user.id,
+          'lastMessage': text
+        });
+      _textController.clear();
+    }
   }
 
   Widget _buildTextComposerWidget() {
