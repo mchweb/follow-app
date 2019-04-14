@@ -1,0 +1,35 @@
+{
+  "project_info": {
+    "project_number": "305679629499",
+    "firebase_url": "https://follow-app-gdansk.firebaseio.com",
+    "project_id": "follow-app-gdansk",
+    "storage_bucket": "follow-app-gdansk.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:305679629499:android:64d30e44bb7f1f2b",
+        "android_client_info": {
+          "package_name": "com.example.follow_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-TDnqlURNzUPebzoqYAyvsfHUvtt_7Hw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "305679629499-fqrds1oa3ikpcm6nc403jieimmom3pfg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
